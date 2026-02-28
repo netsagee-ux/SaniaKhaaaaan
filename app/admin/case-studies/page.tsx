@@ -19,9 +19,40 @@ const poppins = Poppins({
   display: "swap",
 });
 
+/* ---------- TYPES ---------- */
+
+type FormType = {
+  title: string;
+  subtitle: string;
+  client_name: string;
+  category: string;
+  platforms: string;
+  year: string;
+  cover_video: string;
+  cover_image: string;
+  challenge: string;
+  strategy: string;
+  problem: string;
+  solution: string;
+  results: string;
+  gallery: string;
+};
+
+type InputProps = {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+};
+
+type TextAreaProps = {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+};
+
 /* ---------- CONSTANTS ---------- */
 
-const INITIAL_FORM = {
+const INITIAL_FORM: FormType = {
   title: "",
   subtitle: "",
   client_name: "",
@@ -40,9 +71,14 @@ const INITIAL_FORM = {
 
 /* ---------- INPUT ---------- */
 
-const Input = memo(function Input({ label, value, onChange }) {
+const Input = memo(function Input({
+  label,
+  value,
+  onChange,
+}: InputProps) {
   const handleInput = useCallback(
-    (e) => onChange(e.target.value),
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      onChange(e.target.value),
     [onChange]
   );
 
@@ -71,9 +107,14 @@ const Input = memo(function Input({ label, value, onChange }) {
 
 /* ---------- TEXTAREA ---------- */
 
-const TextArea = memo(function TextArea({ label, value, onChange }) {
+const TextArea = memo(function TextArea({
+  label,
+  value,
+  onChange,
+}: TextAreaProps) {
   const handleInput = useCallback(
-    (e) => onChange(e.target.value),
+    (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+      onChange(e.target.value),
     [onChange]
   );
 
@@ -103,22 +144,23 @@ const TextArea = memo(function TextArea({ label, value, onChange }) {
 /* ---------- PAGE ---------- */
 
 function AdminPage() {
-  const [form, setForm] = useState(INITIAL_FORM);
+  const [form, setForm] = useState<FormType>(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
 
-  // Use ref to avoid handleSubmit recreation on every keystroke
-  const formRef = useRef(form);
+  const formRef = useRef<FormType>(form);
   formRef.current = form;
 
   /* ---------- HANDLERS ---------- */
 
-  const handleChange = useCallback((key, value) => {
-    setForm((prev) => {
-      if (prev[key] === value) return prev; // avoid useless re-render
-      const updated = { ...prev, [key]: value };
-      return updated;
-    });
-  }, []);
+  const handleChange = useCallback(
+    (key: keyof FormType, value: string) => {
+      setForm((prev) => {
+        if (prev[key] === value) return prev;
+        return { ...prev, [key]: value };
+      });
+    },
+    []
+  );
 
   const handleSubmit = useCallback(async () => {
     if (loading) return;
@@ -185,7 +227,6 @@ function AdminPage() {
           p-6 sm:p-10 space-y-12
         ">
 
-          {/* BASIC */}
           <section className="space-y-6">
             <h2 className={`${inter.className} text-2xl font-semibold`}>
               Basic Info
@@ -201,7 +242,6 @@ function AdminPage() {
             </div>
           </section>
 
-          {/* MEDIA */}
           <section className="space-y-6">
             <h2 className={`${inter.className} text-2xl font-semibold`}>
               Media
@@ -213,7 +253,6 @@ function AdminPage() {
             </div>
           </section>
 
-          {/* CONTENT */}
           <section className="space-y-6">
             <h2 className={`${inter.className} text-2xl font-semibold`}>
               Case Study Content
