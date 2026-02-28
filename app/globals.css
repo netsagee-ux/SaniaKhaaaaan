@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+
+:root {
+  --background: #e9e5df; /* ← CHANGE HERE */
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* OPTIONAL: remove dark mode override */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #e9e5df; /* keep same in dark mode */
+    --foreground: #171717;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  padding: 0%;
+  margin: 0%;
+}
+
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+}
